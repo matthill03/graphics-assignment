@@ -7,5 +7,8 @@ public:
 	void CreateSceneGraph();
 	void UpdateSceneGraph();
 
+private:
+	int				_rotationAngle {0};
+
 };
 

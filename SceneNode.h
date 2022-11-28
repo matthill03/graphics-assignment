@@ -36,5 +36,44 @@ protected:
 	Matrix				_thisWorldTransformation;
 	Matrix				_cumulativeWorldTransformation;
 	wstring				_name;
+
+	typedef struct
+	{
+		Matrix		WorldViewProjection;
+		Matrix		World;
+		Vector4		AmbientLightColour;
+		Vector4		DirectionalLightColour;
+		Vector4		DirectionalLightVector;
+	}  CBuffer;
+
+	typedef struct {
+		Vector3 Position;
+		Vector3 Normal;
+	}Vertex;
+
+	D3D11_INPUT_ELEMENT_DESC vertexDesc[2] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL"  , 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	};
+
+	Vector4							_ambientLightColour;
+	ComPtr<ID3D11RenderTargetView>	_renderTargetView;
+
+	ComPtr<ID3D11Buffer>			_vertexBuffer;
+	ComPtr<ID3D11Buffer>			_indexBuffer;
+
+	ComPtr<ID3DBlob>				_vertexShaderByteCode = nullptr;
+	ComPtr<ID3DBlob>				_pixelShaderByteCode = nullptr;
+	ComPtr<ID3D11VertexShader>		_vertexShader;
+	ComPtr<ID3D11PixelShader>		_pixelShader;
+	ComPtr<ID3D11InputLayout>		_layout;
+	ComPtr<ID3D11Buffer>			_constantBuffer;
+
+	ComPtr<ID3D11RasterizerState>   _rasteriserState;
+
+	Vector3							_eyePosition;
+	Vector3							_focalPointPosition;
+	Vector3							_upVector;
 };
 
