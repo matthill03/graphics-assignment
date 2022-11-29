@@ -26,9 +26,9 @@ void CubeNode::Render() {
 	CBuffer constantBuffer;
 	constantBuffer.WorldViewProjection = completeTransformation;
 	constantBuffer.World = _cumulativeWorldTransformation;
-	constantBuffer.AmbientLightColour = Vector4(0.5f, 0.5f, 0.5f, 1.0f);
+	constantBuffer.AmbientLightColour = _ambientLightColour;
 	constantBuffer.DirectionalLightVector = Vector4(-1.0f, -1.0f, 1.0f, 0.0f);
-	constantBuffer.DirectionalLightColour = Vector4(Colors::Cyan);
+	constantBuffer.DirectionalLightColour = Vector4(Colors::Beige);
 
 	// Update the constant buffer. Note the layout of the constant buffer must match that in the shader
 	deviceContext->VSSetConstantBuffers(0, 1, _constantBuffer.GetAddressOf());

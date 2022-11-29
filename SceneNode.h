@@ -24,6 +24,7 @@ public:
 	virtual void Shutdown() = 0;
 
 	void SetWorldTransform(const Matrix& worldTransformation) { _thisWorldTransformation = worldTransformation; }
+	Matrix GetWorldTransformation() const { return _thisWorldTransformation; };
 		
 	// Although only required in the composite class, these are provided
 	// in order to simplify the code base for recursive operations

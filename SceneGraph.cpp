@@ -52,11 +52,14 @@ void SceneGraph::Remove(SceneNodePointer node)
 SceneNodePointer SceneGraph::Find(wstring name)
 {
     if (_name == name) {
-        return SceneNodePointer();
+        
+        return SceneNodePointer(this);
     }
     else {
         for (int i = 0; i < _children.size(); i++) {
-            _children[i]->Find(name);
+            if (_children[i]->Find(name)) {
+                return SceneNodePointer(_children[i]);
+            }
         }
     }
     return nullptr;

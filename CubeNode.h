@@ -10,11 +10,10 @@ class CubeNode : public SceneNode
 {
 public:
 	CubeNode() : SceneNode(L"Root") {};
-	CubeNode(wstring name, Color cube_colour) : SceneNode(name) { _ambientLightColour = cube_colour; };
+	CubeNode(wstring name, Vector4 cube_colour) : SceneNode(name) { _ambientLightColour = cube_colour;};
 	~CubeNode(void) {};
 
 private:
-
 	Vertex vertices[24] =
 	{
 		{ Vector3(-1.0f, -1.0f, +1.0f), Vector3(0, 0, 0) },    // side 1
@@ -70,6 +69,7 @@ private:
 	virtual void Render();
 	virtual void Shutdown();
 	void Update();
+
 	void BuildGeometryBuffers();
 	void BuildShaders();
 	void BuildVertexLayout();
