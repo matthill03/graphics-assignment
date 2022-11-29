@@ -49,10 +49,39 @@ void DirectXApp::CreateSceneGraph()
 void DirectXApp::UpdateSceneGraph()
 {
 	SceneGraphPointer sceneGraph = GetSceneGraph();
-
+	
+	
 	SceneNodePointer leftArm = sceneGraph->Find(L"Left Arm");
-	leftArm->SetWorldTransform((Matrix::CreateScale(Vector3(1, 8.5, 1)) * Matrix::CreateRotationX(1) * Matrix::CreateTranslation(Vector3(-6, 22, 0))));
+	SceneNodePointer rightArm = sceneGraph->Find(L"Right Arm");
+	SceneNodePointer leftLeg = sceneGraph->Find(L"Left Leg");
+	SceneNodePointer rightLeg = sceneGraph->Find(L"Right Leg");
+
+
+	if (_leftArmRotation > 0.6f) {
+		_swingDirection = false;
+	}
+	else if (_leftArmRotation < -1.0f) {
+		_swingDirection = true;
+	}
+	else {
+		leftArm->SetWorldTransform((Matrix::CreateScale(Vector3(1, 8.5, 1)) * Matrix::CreateTranslation(Vector3(0, -8.5, 0)) * Matrix::CreateRotationX(_leftArmRotation) * Matrix::CreateTranslation(Vector3(-6, 30.5, 0))));
+		rightArm->SetWorldTransform((Matrix::CreateScale(Vector3(1, 8.5, 1)) * Matrix::CreateTranslation(Vector3(0, -8.5, 0)) * Matrix::CreateRotationX(_rightArmRotation) * Matrix::CreateTranslation(Vector3(6, 30.5, 0))));
+
+		leftLeg->SetWorldTransform((Matrix::CreateScale(Vector3(1, 7.5, 1)) * Matrix::CreateTranslation(Vector3(0, -7.5, 0)) * Matrix::CreateRotationX(_rightArmRotation) * Matrix::CreateTranslation(Vector3(-4, 15, 0))));
+		rightLeg->SetWorldTransform((Matrix::CreateScale(Vector3(1, 7.5, 1)) * Matrix::CreateTranslation(Vector3(0, -7.5, 0)) * Matrix::CreateRotationX(_leftArmRotation) * Matrix::CreateTranslation(Vector3(4, 15, 0))));
+
+	}
+
+	if (_swingDirection) {
+		_leftArmRotation += 0.02f;
+		_rightArmRotation -= 0.02f;
+	}
+	else {
+		_leftArmRotation -= 0.02f;
+		_rightArmRotation += 0.02f;
+	}
 
 	sceneGraph->SetWorldTransform(Matrix::CreateRotationY(_rotationAngle * XM_PI / 180.0f));
 	_rotationAngle = (_rotationAngle + 1) % 360;
+	
 }
