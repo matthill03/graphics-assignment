@@ -14,14 +14,14 @@ struct VertexIn
 {
 	float3 InputPosition : POSITION;
 	float3 Normal		 : NORMAL;
-	float2 Texture		 : TEXTURE;
+	float2 TexCoord		 : TEXTURE;
 };
 
 struct VertexOut
 {
 	float4 OutputPosition	: SV_POSITION;
 	float4 Colour			: COLOR;
-	float Texture			: TEXTURE;
+	float2 TexCoord			: TEXTURE;
 };
 
 VertexOut VS(VertexIn vin)
@@ -37,13 +37,13 @@ VertexOut VS(VertexIn vin)
 	float diffuseBrightness = saturate(dot(adjustedNormal, vectorBackToLight));
 
 	vout.Colour = saturate(ambientLightColour + diffuseBrightness * directionalLightColour);
-	vout.Texture = vin.Texture;
+	vout.TexCoord = vin.TexCoord;
 	return vout;
 }
 
 float4 PS(VertexOut pin) : SV_Target
 {
-	return pin.Colour * Texture.Sample(ss, pin.Texture);
+	return pin.Colour * Texture.Sample(ss, pin.TexCoord);
 }
 
 

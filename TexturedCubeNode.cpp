@@ -2,6 +2,10 @@
 
 
 bool TexturedCubeNode::Initialise() {
+	_device = DirectXFramework::GetDXFramework()->GetDevice();
+	_deviceContext = DirectXFramework::GetDXFramework()->GetDeviceContext();
+	_viewTransformation = DirectXFramework::GetDXFramework()->GetViewTransformation();
+	_projectionTransformation = DirectXFramework::GetDXFramework()->GetProjectionTransformation();
 
 	CalculateVertexNormals();
 	BuildGeometryBuffers();
