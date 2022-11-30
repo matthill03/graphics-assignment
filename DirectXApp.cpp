@@ -1,5 +1,4 @@
 #include "DirectXApp.h"
-#include "CubeNode.h"
 
 DirectXApp app;
 
@@ -8,7 +7,7 @@ void DirectXApp::CreateSceneGraph()
 	SceneGraphPointer sceneGraph = GetSceneGraph();
 	// Now add nodes to the scene graph
 
-	SceneNodePointer head = SceneNodePointer(new CubeNode(L"Head", Vector4(0.4f, 0.1f, 0.1f, 1.0f)));
+	SceneNodePointer head = SceneNodePointer(new TexturedCubeNode(L"Head", Vector4(1.0f, 1.0f, 1.0f, 1.0f), L"woodbox.bmp"));
 
 	// Scale * Rotaion * Translation
 	head->SetWorldTransform(Matrix::CreateScale(Vector3(3, 3, 3)) * Matrix::CreateTranslation(Vector3(0, 34, 0)));
@@ -17,7 +16,7 @@ void DirectXApp::CreateSceneGraph()
 	SceneNodePointer nose = SceneNodePointer(new CubeNode(L"Nose", Vector4(0.4f, 0.1f, 0.1f, 1.0f)));
 	nose->SetWorldTransform(Matrix::CreateTranslation(Vector3(0, 33, 4)));
 
-	SceneNodePointer body = SceneNodePointer(new CubeNode(L"Body", Vector4(0.2f, 0.0f, 0.4f, 1.0f)));
+	SceneNodePointer body = SceneNodePointer(new TexturedCubeNode(L"Body", Vector4(0.2f, 0.0f, 0.4f, 1.0f), L"woodbox.bmp"));
 	body->SetWorldTransform(Matrix::CreateScale(Vector3(5, 8, 2.5)) * Matrix::CreateTranslation(Vector3(0, 23, 0)));
 
 	SceneNodePointer leftArm = SceneNodePointer(new CubeNode(L"Left Arm", Vector4(0.0f, 0.4f, 0.0f, 1.0f)));
@@ -81,7 +80,9 @@ void DirectXApp::UpdateSceneGraph()
 		_rightArmRotation += 0.02f;
 	}
 
-	sceneGraph->SetWorldTransform(Matrix::CreateRotationY(_rotationAngle * XM_PI / 180.0f));
+	sceneGraph->SetWorldTransform(Matrix::CreateRotationY(1.4) * Matrix::CreateTranslation(Vector3(_xPosition, 0, 0)));
+	_xPosition += 0.1f;
 	_rotationAngle = (_rotationAngle + 1) % 360;
+	float bodyRotaion = _rotationAngle * XM_PI / 180.0f;
 	
 }

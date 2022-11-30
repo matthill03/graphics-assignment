@@ -14,7 +14,7 @@ typedef shared_ptr<SceneNode>	SceneNodePointer;
 class SceneNode : public enable_shared_from_this<SceneNode>
 {
 public:
-	SceneNode(wstring name) {_name = name;};
+	SceneNode(wstring name) { _name = name; };
 	~SceneNode(void) {};
 
 	// Core methods
@@ -34,31 +34,18 @@ public:
 	virtual	SceneNodePointer Find(wstring name) { return (_name == name) ? shared_from_this() : nullptr; }
 
 protected:
-	Matrix				_thisWorldTransformation;
-	Matrix				_cumulativeWorldTransformation;
-	wstring				_name;
-
-	typedef struct
-	{
-		Matrix		WorldViewProjection;
-		Matrix		World;
-		Vector4		AmbientLightColour;
-		Vector4		DirectionalLightColour;
-		Vector4		DirectionalLightVector;
-	}  CBuffer;
-
-	typedef struct {
-		Vector3 Position;
-		Vector3 Normal;
-	}Vertex;
-
-	D3D11_INPUT_ELEMENT_DESC vertexDesc[2] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL"  , 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-	};
+	Matrix							_thisWorldTransformation;
+	Matrix							_cumulativeWorldTransformation;
+	wstring							_name;
+	Matrix							_viewTransformation;
+	Matrix							_projectionTransformation;
 
 	Vector4							_ambientLightColour;
+
+
+	ComPtr<ID3D11Device>			_device;
+	ComPtr<ID3D11DeviceContext>		_deviceContext;
+
 	ComPtr<ID3D11RenderTargetView>	_renderTargetView;
 
 	ComPtr<ID3D11Buffer>			_vertexBuffer;

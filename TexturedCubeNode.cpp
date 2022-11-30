@@ -1,8 +1,7 @@
-#include "CubeNode.h"
+#include "TexturedCubeNode.h"
 
 
-bool CubeNode::Initialise() {
-
+bool TexturedCubeNode::Initialise() {
 	_device = DirectXFramework::GetDXFramework()->GetDevice();
 	_deviceContext = DirectXFramework::GetDXFramework()->GetDeviceContext();
 	_viewTransformation = DirectXFramework::GetDXFramework()->GetViewTransformation();
@@ -14,56 +13,65 @@ bool CubeNode::Initialise() {
 	BuildVertexLayout();
 	BuildConstantBuffer();
 	BuildRasteriserState();
+	BuildTexture();
 
 	return true;
 }
 
-void CubeNode::Render() {
+void TexturedCubeNode::Render() {
+
+	DirectXFramework* dxFramework = DirectXFramework::GetDXFramework();
+	ComPtr<ID3D11DeviceContext> deviceContext = dxFramework->GetDeviceContext();
+	Matrix viewTransformation = dxFramework->GetViewTransformation();
+	Matrix projectionTransformation = dxFramework->GetProjectionTransformation();
 
 	// Calculate the world x view x projection transformation
-	Matrix completeTransformation = _cumulativeWorldTransformation * _viewTransformation * _projectionTransformation;
+	Matrix completeTransformation = _cumulativeWorldTransformation * viewTransformation * projectionTransformation;
 
 	CBuffer constantBuffer;
 	constantBuffer.WorldViewProjection = completeTransformation;
 	constantBuffer.World = _cumulativeWorldTransformation;
-	constantBuffer.AmbientLightColour = _ambientLightColour;
 	constantBuffer.DirectionalLightVector = Vector4(-1.0f, -1.0f, 1.0f, 0.0f);
 	constantBuffer.DirectionalLightColour = Vector4(Colors::Beige);
 
 	// Update the constant buffer. Note the layout of the constant buffer must match that in the shader
-	_deviceContext->VSSetConstantBuffers(0, 1, _constantBuffer.GetAddressOf());
-	_deviceContext->UpdateSubresource(_constantBuffer.Get(), 0, 0, &constantBuffer, 0, 0);
+	deviceContext->VSSetConstantBuffers(0, 1, _constantBuffer.GetAddressOf());
+	deviceContext->UpdateSubresource(_constantBuffer.Get(), 0, 0, &constantBuffer, 0, 0);
+
+	// Set Texture to be used in render
+	_deviceContext->PSSetShaderResources(0, 1, _texture.GetAddressOf());
 
 	// Now render the cube
 	// Specify the distance between vertices and the starting point in the vertex buffer
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 	// Set the vertex buffer and index buffer we are going to use
-	_deviceContext->IASetVertexBuffers(0, 1, _vertexBuffer.GetAddressOf(), &stride, &offset);
-	_deviceContext->IASetIndexBuffer(_indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	deviceContext->IASetVertexBuffers(0, 1, _vertexBuffer.GetAddressOf(), &stride, &offset);
+	deviceContext->IASetIndexBuffer(_indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 	// Specify the layout of the polygons (it will rarely be different to this)
-	_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Specify the layout of the input vertices.  This must match the layout of the input vertices in the shader
-	_deviceContext->IASetInputLayout(_layout.Get());
+	deviceContext->IASetInputLayout(_layout.Get());
 
 	// Specify the vertex and pixel shaders we are going to use
-	_deviceContext->VSSetShader(_vertexShader.Get(), 0, 0);
-	_deviceContext->PSSetShader(_pixelShader.Get(), 0, 0);
+	deviceContext->VSSetShader(_vertexShader.Get(), 0, 0);
+	deviceContext->PSSetShader(_pixelShader.Get(), 0, 0);
+	//deviceContext->PSSetShaderResources();
 
 	// Specify details about how the object is to be drawn
-	_deviceContext->RSSetState(_rasteriserState.Get());
+	deviceContext->RSSetState(_rasteriserState.Get());
 
 	// Now draw the first cube
-	_deviceContext->DrawIndexed(ARRAYSIZE(indices), 0, 0);
+	deviceContext->DrawIndexed(ARRAYSIZE(indices), 0, 0);
 }
 
-void CubeNode::Shutdown() {
+void TexturedCubeNode::Shutdown() {
 
 }
 
-Vector3 CubeNode::CalculatePolygonNormal(Vector3 p1, Vector3 p2, Vector3 p3) {
+Vector3 TexturedCubeNode::CalculatePolygonNormal(Vector3 p1, Vector3 p2, Vector3 p3) {
 	Vector3 v12 = p1 - p2;
 	Vector3 v13 = p1 - p3;
 
@@ -72,7 +80,7 @@ Vector3 CubeNode::CalculatePolygonNormal(Vector3 p1, Vector3 p2, Vector3 p3) {
 	return normalVector;
 }
 
-void CubeNode::CalculateVertexNormals() {
+void TexturedCubeNode::CalculateVertexNormals() {
 	for (int i = 0; i < ARRAYSIZE(vertices); i++) {
 		polygonCount[i] = 0;
 	}
@@ -96,7 +104,11 @@ void CubeNode::CalculateVertexNormals() {
 	}
 }
 
-void CubeNode::BuildGeometryBuffers() {
+void TexturedCubeNode::BuildGeometryBuffers() {
+	DirectXFramework* dxFramework = DirectXFramework::GetDXFramework();
+	ComPtr<ID3D11Device> device = dxFramework->GetDevice();
+
+
 	// This method uses the arrays defined in Geometry.h
 	// 
 	// Setup the structure that specifies how big the vertex 
@@ -115,7 +127,7 @@ void CubeNode::BuildGeometryBuffers() {
 	vertexInitialisationData.pSysMem = &vertices;
 
 	// and create the vertex buffer
-	ThrowIfFailed(_device->CreateBuffer(&vertexBufferDescriptor, &vertexInitialisationData, _vertexBuffer.GetAddressOf()));
+	ThrowIfFailed(device->CreateBuffer(&vertexBufferDescriptor, &vertexInitialisationData, _vertexBuffer.GetAddressOf()));
 
 	// Setup the structure that specifies how big the index 
 	// buffer should be
@@ -133,10 +145,13 @@ void CubeNode::BuildGeometryBuffers() {
 	indexInitialisationData.pSysMem = &indices;
 
 	// and create the index buffer
-	ThrowIfFailed(_device->CreateBuffer(&indexBufferDescriptor, &indexInitialisationData, _indexBuffer.GetAddressOf()));
+	ThrowIfFailed(device->CreateBuffer(&indexBufferDescriptor, &indexInitialisationData, _indexBuffer.GetAddressOf()));
 }
 
-void CubeNode::BuildShaders() {
+void TexturedCubeNode::BuildShaders() {
+	DirectXFramework* dxFramework = DirectXFramework::GetDXFramework();
+	ComPtr<ID3D11Device> device = dxFramework->GetDevice();
+
 	DWORD shaderCompileFlags = 0;
 #if defined( _DEBUG )
 	shaderCompileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
@@ -145,7 +160,7 @@ void CubeNode::BuildShaders() {
 	ComPtr<ID3DBlob> compilationMessages = nullptr;
 
 	//Compile vertex shader
-	HRESULT hr = D3DCompileFromFile(ShaderFileName,
+	HRESULT hr = D3DCompileFromFile(TextureShaderFileName,
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		VertexShaderName, "vs_5_0",
 		shaderCompileFlags, 0,
@@ -159,10 +174,10 @@ void CubeNode::BuildShaders() {
 	}
 	// Even if there are no compiler messages, check to make sure there were no other errors.
 	ThrowIfFailed(hr);
-	ThrowIfFailed(_device->CreateVertexShader(_vertexShaderByteCode->GetBufferPointer(), _vertexShaderByteCode->GetBufferSize(), NULL, _vertexShader.GetAddressOf()));
+	ThrowIfFailed(device->CreateVertexShader(_vertexShaderByteCode->GetBufferPointer(), _vertexShaderByteCode->GetBufferSize(), NULL, _vertexShader.GetAddressOf()));
 
 	// Compile pixel shader
-	hr = D3DCompileFromFile(ShaderFileName,
+	hr = D3DCompileFromFile(TextureShaderFileName,
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		PixelShaderName, "ps_5_0",
 		shaderCompileFlags, 0,
@@ -175,19 +190,23 @@ void CubeNode::BuildShaders() {
 		MessageBoxA(0, (char*)compilationMessages->GetBufferPointer(), 0, 0);
 	}
 	ThrowIfFailed(hr);
-	ThrowIfFailed(_device->CreatePixelShader(_pixelShaderByteCode->GetBufferPointer(), _pixelShaderByteCode->GetBufferSize(), NULL, _pixelShader.GetAddressOf()));
+	ThrowIfFailed(device->CreatePixelShader(_pixelShaderByteCode->GetBufferPointer(), _pixelShaderByteCode->GetBufferSize(), NULL, _pixelShader.GetAddressOf()));
 }
 
-void CubeNode::BuildVertexLayout()
+void TexturedCubeNode::BuildVertexLayout()
 {
+	DirectXFramework* dxFramework = DirectXFramework::GetDXFramework();
+	ComPtr<ID3D11Device> device = dxFramework->GetDevice();
 	// Create the vertex input layout. This tells DirectX the format
 	// of each of the vertices we are sending to it. The vertexDesc array is
 	// defined in Geometry.h
 
-	ThrowIfFailed(_device->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), _vertexShaderByteCode->GetBufferPointer(), _vertexShaderByteCode->GetBufferSize(), _layout.GetAddressOf()));
+	ThrowIfFailed(device->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), _vertexShaderByteCode->GetBufferPointer(), _vertexShaderByteCode->GetBufferSize(), _layout.GetAddressOf()));
 }
 
-void CubeNode::BuildConstantBuffer() {
+void TexturedCubeNode::BuildConstantBuffer() {
+	DirectXFramework* dxFramework = DirectXFramework::GetDXFramework();
+	ComPtr<ID3D11Device> device = dxFramework->GetDevice();
 
 	D3D11_BUFFER_DESC bufferDesc;
 	ZeroMemory(&bufferDesc, sizeof(bufferDesc));
@@ -195,10 +214,12 @@ void CubeNode::BuildConstantBuffer() {
 	bufferDesc.ByteWidth = sizeof(CBuffer);
 	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
-	ThrowIfFailed(_device->CreateBuffer(&bufferDesc, NULL, _constantBuffer.GetAddressOf()));
+	ThrowIfFailed(device->CreateBuffer(&bufferDesc, NULL, _constantBuffer.GetAddressOf()));
 }
 
-void CubeNode::BuildRasteriserState() {
+void TexturedCubeNode::BuildRasteriserState() {
+	DirectXFramework* dxFramework = DirectXFramework::GetDXFramework();
+	ComPtr<ID3D11Device> device = dxFramework->GetDevice();
 
 	D3D11_RASTERIZER_DESC rasteriserDesc;
 	rasteriserDesc.CullMode = D3D11_CULL_BACK;
@@ -211,5 +232,15 @@ void CubeNode::BuildRasteriserState() {
 	rasteriserDesc.MultisampleEnable = false;
 	rasteriserDesc.AntialiasedLineEnable = false;
 	rasteriserDesc.FillMode = D3D11_FILL_SOLID;
-	ThrowIfFailed(_device->CreateRasterizerState(&rasteriserDesc, _rasteriserState.GetAddressOf()));
+	ThrowIfFailed(device->CreateRasterizerState(&rasteriserDesc, _rasteriserState.GetAddressOf()));
 }
+
+void TexturedCubeNode::BuildTexture() {
+	ThrowIfFailed(CreateWICTextureFromFile(_device.Get(),
+		_deviceContext.Get(), 
+		_textureName.c_str(), 
+		nullptr, 
+		_texture.GetAddressOf()
+	));
+}
+
