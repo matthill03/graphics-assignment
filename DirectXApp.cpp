@@ -1,5 +1,4 @@
 #include "DirectXApp.h"
-#include "CubeNode.h"
 
 DirectXApp app;
 

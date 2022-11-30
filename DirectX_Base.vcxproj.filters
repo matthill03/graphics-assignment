@@ -54,6 +54,12 @@
     <ClInclude Include="CubeNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TexturedCubeNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WICTextureLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectXApp.cpp">
@@ -77,12 +83,21 @@
     <ClCompile Include="CubeNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TexturedCubeNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WICTextureLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="DirectXApp.ico">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="woodbox.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -98,5 +113,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="shader.hlsl" />
+    <Text Include="textureShader.hlsl" />
   </ItemGroup>
 </Project>

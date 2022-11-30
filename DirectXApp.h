@@ -1,5 +1,7 @@
 #pragma once
 #include "DirectXFramework.h"
+#include "CubeNode.h"
+#include "TexturedCubeNode.h"
 
 class DirectXApp : public DirectXFramework
 {
