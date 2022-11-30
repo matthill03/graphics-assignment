@@ -1,13 +1,15 @@
 #include "CubeNode.h"
 
-
+// Implementing Initialise()
 bool CubeNode::Initialise() {
 
+	// Setting variables to be used from DX Framework
 	_device = DirectXFramework::GetDXFramework()->GetDevice();
 	_deviceContext = DirectXFramework::GetDXFramework()->GetDeviceContext();
 	_viewTransformation = DirectXFramework::GetDXFramework()->GetViewTransformation();
 	_projectionTransformation = DirectXFramework::GetDXFramework()->GetProjectionTransformation();
 
+	// Calling all initialisation methods
 	CalculateVertexNormals();
 	BuildGeometryBuffers();
 	BuildShaders();
@@ -15,14 +17,17 @@ bool CubeNode::Initialise() {
 	BuildConstantBuffer();
 	BuildRasteriserState();
 
+	// When successfull return true
 	return true;
 }
 
+// Implementing Render()
 void CubeNode::Render() {
 
 	// Calculate the world x view x projection transformation
 	Matrix completeTransformation = _cumulativeWorldTransformation * _viewTransformation * _projectionTransformation;
 
+	// Create constant buffer
 	CBuffer constantBuffer;
 	constantBuffer.WorldViewProjection = completeTransformation;
 	constantBuffer.World = _cumulativeWorldTransformation;
@@ -59,28 +64,41 @@ void CubeNode::Render() {
 	_deviceContext->DrawIndexed(ARRAYSIZE(indices), 0, 0);
 }
 
+// Implementing Shutdown()
 void CubeNode::Shutdown() {
 
 }
 
+// Implementing CalculatePolygonNormal()
 Vector3 CubeNode::CalculatePolygonNormal(Vector3 p1, Vector3 p2, Vector3 p3) {
+
+	// Calculate vectors from point 1 to point 2, and point 1 to point 3
 	Vector3 v12 = p1 - p2;
 	Vector3 v13 = p1 - p3;
 
+	// Calculate the cross product to give perpendicular vector (normalVector)
 	Vector3 normalVector = v12.Cross(v13);
 
+	// Return result
 	return normalVector;
 }
 
+// Implementing CalculateVertexNormals()
 void CubeNode::CalculateVertexNormals() {
+	// For all verticies, set corresponding polygon count to 0
 	for (int i = 0; i < ARRAYSIZE(vertices); i++) {
 		polygonCount[i] = 0;
 	}
 
+	// For all polygons calculate normal, and add to each vertex in polygon
 	for (int i = 0; i < ARRAYSIZE(indices); i += 3) {
+
+		// Calculate polygonNormal for current polygon
 		Vector3 polygonNormal = CalculatePolygonNormal(vertices[indices[i]].Position, vertices[indices[i + 1]].Position, vertices[indices[i + 2]].Position);
 
+		// Add polygonNormal to each vertex normal in the polygon
 		vertices[indices[i]].Normal = vertices[indices[i]].Normal + polygonNormal;
+		// increment coresponding polygon count
 		polygonCount[indices[i]]++;
 
 		vertices[indices[i + 1]].Normal = vertices[indices[i + 1]].Normal + polygonNormal;
@@ -90,8 +108,14 @@ void CubeNode::CalculateVertexNormals() {
 		polygonCount[indices[i + 2]]++;
 	}
 
+	// Work out normal at each vertex 
 	for (int i = 0; i < ARRAYSIZE(vertices); i++) {
+		// Take vertex normal and divide by coresponding polygonCount
+		// this takes the average normal
 		vertices[i].Normal /= polygonCount[i];
+
+		// Then normalise normal, this will give each x, y and z a value of
+		// -1, 0 or 1 for direction of the normal
 		vertices[i].Normal.Normalize();
 	}
 }

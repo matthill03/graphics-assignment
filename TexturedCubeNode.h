@@ -19,15 +19,6 @@ private:
 	wstring								_textureName;
 	ComPtr<ID3D11ShaderResourceView>	_texture;
 
-	typedef struct
-	{
-		Matrix		WorldViewProjection;
-		Matrix		World;
-		Vector4		AmbientLightColour;
-		Vector4		DirectionalLightColour;
-		Vector4		DirectionalLightVector;
-	}  CBuffer;
-
 	typedef struct {
 		Vector3 Position;
 		Vector3 Normal;
