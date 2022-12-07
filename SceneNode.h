@@ -35,14 +35,18 @@ public:
 
 protected:
 
-	typedef struct
+	typedef struct  CBuffer
 	{
 		Matrix		WorldViewProjection;
 		Matrix		World;
 		Vector4		AmbientLightColour;
 		Vector4		DirectionalLightColour;
 		Vector4		DirectionalLightVector;
-	}  CBuffer;
+		Vector3		EyePosition;
+		float		SpecularPower {0.0f};
+		Vector4		SpecularColour;
+
+	};
 
 	Matrix							_thisWorldTransformation;
 	Matrix							_cumulativeWorldTransformation;
@@ -73,5 +77,6 @@ protected:
 	Vector3							_eyePosition;
 	Vector3							_focalPointPosition;
 	Vector3							_upVector;
+
 };
 

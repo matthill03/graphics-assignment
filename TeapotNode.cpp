@@ -32,11 +32,15 @@ void TeapotNode::Render()
 	constantBuffer.WorldViewProjection = completeTransformation;
 	constantBuffer.World = _cumulativeWorldTransformation;
 	constantBuffer.AmbientLightColour = _ambientLightColour;
-	constantBuffer.DirectionalLightVector = Vector4(-1.0f, -1.0f, 1.0f, 0.0f);
-	constantBuffer.DirectionalLightColour = Vector4(Colors::Beige);
+	constantBuffer.DirectionalLightVector = DirectXFramework::GetDXFramework()->GetDirectionalLightVector();
+	constantBuffer.DirectionalLightColour = DirectXFramework::GetDXFramework()->GetDirectionalLightColour();
+	constantBuffer.EyePosition = _eyePosition;
+	constantBuffer.SpecularPower = DirectXFramework::GetDXFramework()->GetSpecularPower();
+	constantBuffer.SpecularColour = DirectXFramework::GetDXFramework()->GetSpecularColour();
 
 	// Update the constant buffer. Note the layout of the constant buffer must match that in the shader
 	_deviceContext->VSSetConstantBuffers(0, 1, _constantBuffer.GetAddressOf());
+	_deviceContext->PSSetConstantBuffers(0, 1, _constantBuffer.GetAddressOf());
 	_deviceContext->UpdateSubresource(_constantBuffer.Get(), 0, 0, &constantBuffer, 0, 0);
 
 	// Now render the cube

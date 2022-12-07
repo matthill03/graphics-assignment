@@ -33,9 +33,13 @@ void TexturedCubeNode::Render() {
 	constantBuffer.World = _cumulativeWorldTransformation;
 	constantBuffer.DirectionalLightVector = Vector4(-1.0f, -1.0f, 1.0f, 0.0f);
 	constantBuffer.DirectionalLightColour = Vector4(Colors::Beige);
+	constantBuffer.EyePosition = _eyePosition;
+	constantBuffer.SpecularPower = 0.5f;
+	constantBuffer.SpecularColour = Vector4(1.0f, 1.0f, 1.0f, 0.0f);
 
 	// Update the constant buffer. Note the layout of the constant buffer must match that in the shader
 	deviceContext->VSSetConstantBuffers(0, 1, _constantBuffer.GetAddressOf());
+	deviceContext->PSSetConstantBuffers(0, 1, _constantBuffer.GetAddressOf());
 	deviceContext->UpdateSubresource(_constantBuffer.Get(), 0, 0, &constantBuffer, 0, 0);
 
 	// Set Texture to be used in render

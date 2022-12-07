@@ -25,6 +25,11 @@ public:
 	inline ComPtr<ID3D11Device>			GetDevice() { return _device; }
 	inline ComPtr<ID3D11DeviceContext>	GetDeviceContext() { return _deviceContext; }
 
+	const Vector4						GetDirectionalLightColour() { return _directionalLightColour; };
+	const Vector4						GetDirectionalLightVector() { return _directionalLightVector; };
+	const float							GetSpecularPower() { return _specularPower; };
+	const Vector4						GetSpecularColour() { return _specularColour; };
+
 	const Matrix&						GetViewTransformation() const;
 	const Matrix&						GetProjectionTransformation() const;
 
@@ -43,6 +48,11 @@ private:
 	Vector3								_eyePosition;
 	Vector3								_focalPointPosition;
 	Vector3								_upVector;
+
+	Vector4								_directionalLightVector;
+	Vector4								_directionalLightColour;
+	float								_specularPower;
+	Vector4								_specularColour;
 
 	Matrix								_viewTransformation;
 	Matrix								_projectionTransformation;

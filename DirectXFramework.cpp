@@ -22,6 +22,11 @@ DirectXFramework::DirectXFramework(unsigned int width, unsigned int height) : Fr
 
 	// Initialise vectors used to create camera.  We will move these
 	// to a separate Camera class later
+	_directionalLightVector = Vector4(-1.0f, -1.0f, 1.0f, 0.0f);
+	_directionalLightColour = Vector4(Colors::Beige);
+	_specularPower = 0.5f;
+	_specularColour = Vector4(1.0f, 1.0f, 1.0f, 0.0f);
+
 	_eyePosition = Vector3(0.0f, 20.0f, -90.0f);
 	_focalPointPosition = Vector3(0.0f, 20.0f, 0.0f);
 	_upVector = Vector3(0.0f, 1.0f, 0.0f);
