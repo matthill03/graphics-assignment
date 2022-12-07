@@ -140,6 +140,7 @@
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TeapotNode.h" />
     <ClInclude Include="TexturedCubeNode.h" />
     <ClInclude Include="WICTextureLoader.h" />
   </ItemGroup>
@@ -151,6 +152,7 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="SceneGraph.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
+    <ClCompile Include="TeapotNode.cpp" />
     <ClCompile Include="TexturedCubeNode.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
   </ItemGroup>

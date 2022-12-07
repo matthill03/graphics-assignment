@@ -92,7 +92,7 @@ private:
 	virtual void Shutdown();
 	void Update();
 
-	// Methods for passing data from CPU to GPU, also building data to be passed
+	// Methods for passing data from CPU to GPU, also building data to be passes
 	void BuildGeometryBuffers();
 	void BuildShaders();
 	void BuildVertexLayout();

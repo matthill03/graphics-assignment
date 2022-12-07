@@ -31,6 +31,10 @@ void DirectXApp::CreateSceneGraph()
 	SceneNodePointer rightLeg = SceneNodePointer(new CubeNode(L"Right Leg", Vector4(0.1f, 0.2f, 0.3f, 1.0f)));
 	rightLeg->SetWorldTransform(Matrix::CreateScale(Vector3(1, 7.5, 1)) * Matrix::CreateTranslation(Vector3(4, 7.5, 0)));
 
+	SceneNodePointer randomTeapot = SceneNodePointer(new TeapotNode(L"Teapot", Vector4(0.1f, 0.2f, 0.3f, 1.0f)));
+	randomTeapot->SetWorldTransform(Matrix::CreateScale(Vector3(4, 4, 4)));
+
+
 
 	sceneGraph->Add(head);
 	sceneGraph->Add(nose);
@@ -42,6 +46,8 @@ void DirectXApp::CreateSceneGraph()
 
 	sceneGraph->Add(leftLeg);
 	sceneGraph->Add(rightLeg);
+
+	sceneGraph->Add(randomTeapot);
 
 }
 
