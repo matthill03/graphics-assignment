@@ -3,6 +3,8 @@
 #include "Framework.h"
 #include "DirectXCore.h"
 #include "SceneGraph.h"
+#include "CubeRenderer.h"
+#include "TexturedCubeRenderer.h"
 
 class DirectXFramework : public Framework
 {
@@ -33,6 +35,9 @@ public:
 	const Matrix&						GetViewTransformation() const;
 	const Matrix&						GetProjectionTransformation() const;
 
+	const CubeRendererPointer			GetCubeRenderer() { return _cubeRender; };
+	const TexturedCubeRendererPointer	GetTexturedCubeRenderer() { return _texturedCubeRender; };
+
 	void								SetBackgroundColour(Vector4 backgroundColour);
 
 private:
@@ -60,6 +65,9 @@ private:
 	SceneGraphPointer					_sceneGraph;
 
 	float							    _backgroundColour[4];
+
+	CubeRendererPointer					_cubeRender;
+	TexturedCubeRendererPointer			_texturedCubeRender;
 
 	bool GetDeviceAndSwapChain();
 };
