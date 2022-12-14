@@ -4,10 +4,12 @@
 bool TexturedCubeNode::Initialise() {
 	BuildTexture();
 
-	if (DirectXFramework::GetDXFramework()->GetTexturedCubeRenderer()->Initialise()) {
+	/*if (DirectXFramework::GetDXFramework()->GetTexturedCubeRenderer()->Initialise()) {
 		return true;
 	}
-	return false;
+	return false;*/
+
+	return true;
 }
 
 void TexturedCubeNode::Render() {

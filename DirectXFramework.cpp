@@ -82,10 +82,19 @@ bool DirectXFramework::Initialise()
 	// Create camera and projection matrices 
 	_projectionTransformation = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)GetWindowWidth() / GetWindowHeight(), 1.0f, 10000.0f);
 	_sceneGraph = make_shared<SceneGraph>();
+
+	// Create object instanse of renderer classes
 	_cubeRender = make_shared<CubeRenderer>(_device, _deviceContext, _viewTransformation, _projectionTransformation);
 	_texturedCubeRender = make_shared<TexturedCubeRenderer>(_device, _deviceContext, _viewTransformation, _projectionTransformation);
+	_teapotRender = make_shared<TeapotRenderer>(_device, _deviceContext, _viewTransformation, _projectionTransformation);
 
 	CreateSceneGraph();
+
+	// Initialise renderer classes by sending data to the gpu
+	_cubeRender->Initialise();
+	_texturedCubeRender->Initialise();
+	_teapotRender->Initialise();
+
 	return _sceneGraph->Initialise();
 }
 

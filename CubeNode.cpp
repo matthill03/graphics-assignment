@@ -2,11 +2,11 @@
 
 // Implementing Initialise()
 bool CubeNode::Initialise() {
-	if (DirectXFramework::GetDXFramework()->GetCubeRenderer()->Initialise()) {
-		return true;
-	}
-
-	return false;
+	//if (DirectXFramework::GetDXFramework()->GetCubeRenderer()->Initialise()) {
+	//	return true;
+	//}
+	return true;
+	//return false;
 }
 
 // Implementing Render()

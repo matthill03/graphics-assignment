@@ -5,6 +5,7 @@
 #include "SceneGraph.h"
 #include "CubeRenderer.h"
 #include "TexturedCubeRenderer.h"
+#include "TeapotRenderer.h"
 
 class DirectXFramework : public Framework
 {
@@ -37,6 +38,7 @@ public:
 
 	const CubeRendererPointer			GetCubeRenderer() { return _cubeRender; };
 	const TexturedCubeRendererPointer	GetTexturedCubeRenderer() { return _texturedCubeRender; };
+	const TeapotRendererPointer			GetTeapotRenderer() { return _teapotRender; };
 
 	void								SetBackgroundColour(Vector4 backgroundColour);
 
@@ -68,6 +70,8 @@ private:
 
 	CubeRendererPointer					_cubeRender;
 	TexturedCubeRendererPointer			_texturedCubeRender;
+	TeapotRendererPointer				_teapotRender;
+
 
 	bool GetDeviceAndSwapChain();
 };
