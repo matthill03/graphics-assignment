@@ -31,7 +31,7 @@ void DirectXApp::CreateSceneGraph()
 	SceneNodePointer rightLeg = SceneNodePointer(new CubeNode(L"Right Leg", Vector4(0.1f, 0.2f, 0.3f, 1.0f)));
 	rightLeg->SetWorldTransform(Matrix::CreateScale(Vector3(1, 7.5, 1)) * Matrix::CreateTranslation(Vector3(4, 7.5, 0)));
 
-	SceneNodePointer randomTeapot = make_shared<TeapotNode>(L"Teapot", Vector4(0.1f, 0.2f, 0.3f, 1.0f));
+	SceneNodePointer randomTeapot = make_shared<TeapotNode>(L"Teapot", Vector4(0.1f, 0.5f, 0.2f, 1.0f));
 	randomTeapot->SetWorldTransform(Matrix::CreateScale(Vector3(10, 10, 10)));
 
 
@@ -56,38 +56,38 @@ void DirectXApp::UpdateSceneGraph()
 	SceneGraphPointer sceneGraph = GetSceneGraph();
 	
 	
-	//SceneNodePointer leftArm = sceneGraph->Find(L"Left Arm");
-	//SceneNodePointer rightArm = sceneGraph->Find(L"Right Arm");
-	//SceneNodePointer leftLeg = sceneGraph->Find(L"Left Leg");
-	//SceneNodePointer rightLeg = sceneGraph->Find(L"Right Leg");
+	SceneNodePointer leftArm = sceneGraph->Find(L"Left Arm");
+	SceneNodePointer rightArm = sceneGraph->Find(L"Right Arm");
+	SceneNodePointer leftLeg = sceneGraph->Find(L"Left Leg");
+	SceneNodePointer rightLeg = sceneGraph->Find(L"Right Leg");
 
 
-	//if (_leftArmRotation > 0.6f) {
-	//	_swingDirection = false;
-	//}
-	//else if (_leftArmRotation < -1.0f) {
-	//	_swingDirection = true;
-	//}
-	//else {
-	//	leftArm->SetWorldTransform((Matrix::CreateScale(Vector3(1, 8.5, 1)) * Matrix::CreateTranslation(Vector3(0, -8.5, 0)) * Matrix::CreateRotationX(_leftArmRotation) * Matrix::CreateTranslation(Vector3(-6, 30.5, 0))));
-	//	rightArm->SetWorldTransform((Matrix::CreateScale(Vector3(1, 8.5, 1)) * Matrix::CreateTranslation(Vector3(0, -8.5, 0)) * Matrix::CreateRotationX(_rightArmRotation) * Matrix::CreateTranslation(Vector3(6, 30.5, 0))));
+	if (_leftArmRotation > 0.6f) {
+		_swingDirection = false;
+	}
+	else if (_leftArmRotation < -1.0f) {
+		_swingDirection = true;
+	}
+	else {
+		leftArm->SetWorldTransform((Matrix::CreateScale(Vector3(1, 8.5, 1)) * Matrix::CreateTranslation(Vector3(0, -8.5, 0)) * Matrix::CreateRotationX(_leftArmRotation) * Matrix::CreateTranslation(Vector3(-6, 30.5, 0))));
+		rightArm->SetWorldTransform((Matrix::CreateScale(Vector3(1, 8.5, 1)) * Matrix::CreateTranslation(Vector3(0, -8.5, 0)) * Matrix::CreateRotationX(_rightArmRotation) * Matrix::CreateTranslation(Vector3(6, 30.5, 0))));
 
-	//	leftLeg->SetWorldTransform((Matrix::CreateScale(Vector3(1, 7.5, 1)) * Matrix::CreateTranslation(Vector3(0, -7.5, 0)) * Matrix::CreateRotationX(_rightArmRotation) * Matrix::CreateTranslation(Vector3(-4, 15, 0))));
-	//	rightLeg->SetWorldTransform((Matrix::CreateScale(Vector3(1, 7.5, 1)) * Matrix::CreateTranslation(Vector3(0, -7.5, 0)) * Matrix::CreateRotationX(_leftArmRotation) * Matrix::CreateTranslation(Vector3(4, 15, 0))));
+		leftLeg->SetWorldTransform((Matrix::CreateScale(Vector3(1, 7.5, 1)) * Matrix::CreateTranslation(Vector3(0, -7.5, 0)) * Matrix::CreateRotationX(_rightArmRotation) * Matrix::CreateTranslation(Vector3(-4, 15, 0))));
+		rightLeg->SetWorldTransform((Matrix::CreateScale(Vector3(1, 7.5, 1)) * Matrix::CreateTranslation(Vector3(0, -7.5, 0)) * Matrix::CreateRotationX(_leftArmRotation) * Matrix::CreateTranslation(Vector3(4, 15, 0))));
 
-	//}
+	}
 
-	/*if (_swingDirection) {
+	if (_swingDirection) {
 		_leftArmRotation += 0.02f;
 		_rightArmRotation -= 0.02f;
 	}
 	else {
 		_leftArmRotation -= 0.02f;
 		_rightArmRotation += 0.02f;
-	}*/
+	}
 
-	sceneGraph->SetWorldTransform(Matrix::CreateRotationY(_rotationAngle * XM_PI / 180));
-	/*_xPosition += 0.1f;*/
+	sceneGraph->SetWorldTransform(Matrix::CreateRotationY(1.75) * Matrix::CreateTranslation(_xPosition, 0, 0));
+	_xPosition += 0.1f;
 	_rotationAngle = (_rotationAngle + 1) % 360;
 	
 }

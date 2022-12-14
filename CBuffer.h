@@ -12,4 +12,5 @@ typedef struct  CBuffer
 	float		SpecularPower{ 0.0f };
 	Vector4		SpecularColour;
 
+
 };

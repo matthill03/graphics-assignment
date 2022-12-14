@@ -50,8 +50,18 @@ float4 PS(VertexOut pin) : SV_Target
 {
 	float4 vectorBackToLight = -directionalLightVector;
 
+	float4 lightDir = normalize(pin.OutputPosition - directionalLightVector);
+	float4 viewDir = normalize(pin.OutputPosition - float4(eyePosition, 1.0f));
+	float4 halfwayDir = normalize(lightDir + viewDir);
+	float halfwayMag = length(halfwayDir);
+
+	float4 halfway = normalize(halfwayDir) / normalize(halfwayMag);
+
+	float specular = pow(saturate(dot(pin.Normal, halfway)), specularPower);
+
+	// calculate the diffuse light and add it to the ambient light
 	float diffuseBrightness = saturate(dot(pin.Normal, vectorBackToLight));
-	float4 Colour = saturate(ambientLightColour + diffuseBrightness * directionalLightColour);
+	float4 Colour = saturate(ambientLightColour) + (saturate(diffuseBrightness) * saturate(directionalLightColour) * saturate(specular));
 
 	return Colour * Texture.Sample(ss, pin.TexCoord);
 }
