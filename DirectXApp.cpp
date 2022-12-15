@@ -86,7 +86,7 @@ void DirectXApp::UpdateSceneGraph()
 		_rightArmRotation += 0.02f;
 	}
 
-	sceneGraph->SetWorldTransform(Matrix::CreateRotationY(1.75) * Matrix::CreateTranslation(_xPosition, 0, 0));
+	sceneGraph->SetWorldTransform(Matrix::CreateRotationY(_rotationAngle * XM_PI / 180) * Matrix::CreateTranslation(_xPosition, 0, 0));
 	_xPosition += 0.1f;
 	_rotationAngle = (_rotationAngle + 1) % 360;
 	
