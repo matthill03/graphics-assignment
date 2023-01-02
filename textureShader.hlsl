@@ -58,14 +58,16 @@ float4 PS(VertexOut pin) : SV_Target
 	float4 halfway = normalize(halfwayDir) / normalize(halfwayMag);
 
 	float specular = pow(saturate(dot(pin.Normal, halfway)), specularPower);
+
 	float4 specCol = specular * specularColour;
 
-
 	// calculate the diffuse light and add it to the ambient light
-	float diffuseBrightness = saturate(dot(pin.Normal, vectorBackToLight));
-	float4 Colour = saturate(ambientLightColour) + (saturate(diffuseBrightness) * saturate(directionalLightColour) * saturate(specCol));
+	float diffuseBrightness = saturate(dot(pin.Normal, -vectorBackToLight));
+	float4 Colour = saturate(ambientLightColour) + saturate(diffuseBrightness) * saturate(directionalLightColour);
 
-	return Colour * Texture.Sample(ss, pin.TexCoord);
+	float4 newColour = Colour + specCol;
+
+	return newColour * Texture.Sample(ss, pin.TexCoord);
 }
 
 
