@@ -50,8 +50,9 @@ float4 PS(VertexOut pin) : SV_Target
 {
 	float4 vectorBackToLight = -directionalLightVector;
 
-	float4 lightDir = normalize(pin.OutputPosition + specularDirection);
-	float4 viewDir = normalize(pin.OutputPosition - float4(eyePosition, 1.0f));
+	float4 lightDir = normalize(pin.WorldPosition - specularDirection);
+	float4 viewDir = normalize(pin.WorldPosition - float4(eyePosition, 1.0f));
+
 	float4 halfwayDir = normalize(lightDir - viewDir);
 	float halfwayMag = length(halfwayDir);
 

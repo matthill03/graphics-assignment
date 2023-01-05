@@ -14,7 +14,7 @@ void DirectXApp::CreateSceneGraph()
 	//// thisWorldTransform[0][0] = vector.x; // thisWorldTransform[0][1] = vector.y; // thisWorldTransform[0][2] = vector.z;
 
 	SceneNodePointer nose = SceneNodePointer(new CubeNode(L"Nose", Vector4(0.4f, 0.1f, 0.1f, 1.0f)));
-	nose->SetWorldTransform(Matrix::CreateTranslation(Vector3(0, 33, 4)));
+	nose->SetWorldTransform(Matrix::CreateTranslation(Vector3(0, 33, -4)));
 
 	SceneNodePointer body = SceneNodePointer(new TexturedCubeNode(L"Body", Vector4(0.2f, 0.0f, 0.4f, 1.0f), L"woodbox.bmp"));
 	body->SetWorldTransform(Matrix::CreateScale(Vector3(5, 8, 2.5)) * Matrix::CreateTranslation(Vector3(0, 23, 0)));
@@ -50,7 +50,7 @@ void DirectXApp::CreateSceneGraph()
 	sceneGraph->Add(leftLeg);
 	sceneGraph->Add(rightLeg);
 
-	//sceneGraph->Add(randomTeapot);
+	/*sceneGraph->Add(randomTeapot);*/
 	sceneGraph->Add(randomModel);
 
 }
@@ -64,7 +64,10 @@ void DirectXApp::UpdateSceneGraph()
 	SceneNodePointer rightArm = sceneGraph->Find(L"Right Arm");
 	SceneNodePointer leftLeg = sceneGraph->Find(L"Left Leg");
 	SceneNodePointer rightLeg = sceneGraph->Find(L"Right Leg");
+	SceneNodePointer model = sceneGraph->Find(L"Model");
 
+	_yPosition += 0.1;
+	DirectXFramework::GetDXFramework()->SetSpecularDirection(Vector4(0.0f, _yPosition, 0.0f, 0.0f));
 
 	if (_leftArmRotation > 0.6f) {
 		_swingDirection = false;
@@ -82,15 +85,17 @@ void DirectXApp::UpdateSceneGraph()
 	}
 
 	if (_swingDirection) {
-		_leftArmRotation += 0.02f;
-		_rightArmRotation -= 0.02f;
+		_leftArmRotation += 0.01f;
+		_rightArmRotation -= 0.01f;
 	}
 	else {
-		_leftArmRotation -= 0.02f;
-		_rightArmRotation += 0.02f;
+		_leftArmRotation -= 0.01f;
+		_rightArmRotation += 0.01f;
 	}
 
-	sceneGraph->SetWorldTransform(Matrix::CreateRotationY(_rotationAngle * XM_PI / 180));
-	_rotationAngle = (_rotationAngle + 1) % 360;
+	model->SetWorldTransform(Matrix::CreateScale(Vector3(5, 5, 5)) * Matrix::CreateTranslation(Vector3(30, 0, 0)) * Matrix::CreateRotationY(_rotationAngle * XM_PI / 360));
+
+	_rotationAngle += 1;
+	sceneGraph->SetWorldTransform(Matrix::CreateRotationY(_rotationAngle * XM_PI / 720));
 	
 }

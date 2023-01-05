@@ -34,6 +34,7 @@ public:
 	const float							GetSpecularPower() { return _specularPower; };
 	const Vector4						GetSpecularColour() { return _specularColour; };
 	const Vector4						GetSpecularDirection() { return _specularLightDirection; };
+	void								SetSpecularDirection(Vector4 specularDirection) { _specularLightDirection = specularDirection; };
 
 	const Matrix&						GetViewTransformation() const;
 	const Matrix&						GetProjectionTransformation() const;

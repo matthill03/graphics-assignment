@@ -16,6 +16,7 @@ private:
 	float			_leftArmRotation	{ 0.0f };
 	float			_rightArmRotation   { 0.0f };
 	bool			_swingDirection		{ false };
+	float			_yPosition			{ 0.0f };
 	float			_xPosition			{ 0.0f };
 
 };
