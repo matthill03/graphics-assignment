@@ -11,6 +11,7 @@ typedef struct  CBuffer
 	Vector3		EyePosition;
 	float		SpecularPower{ 0.0f };
 	Vector4		SpecularColour;
+	Vector4		SpecularDirection;
 
 
 };

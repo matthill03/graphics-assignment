@@ -8,7 +8,7 @@ cbuffer ConstantBuffer
 	float3	eyePosition;
 	float	specularPower;
 	float4	specularColour;
-	float3	padding;
+	float4	specularDirection;
 };
 
 struct VertexIn
@@ -47,9 +47,9 @@ float4 PS(VertexOut pin) : SV_Target
 { 
 	float4 vectorBackToLight = -directionalLightVector;
 
-	float4 lightDir = normalize(pin.OutputPosition - directionalLightVector);
+	float4 lightDir = normalize(pin.OutputPosition + specularDirection);
 	float4 viewDir = normalize(pin.OutputPosition - float4(eyePosition, 1.0f));
-	float4 halfwayDir = normalize(lightDir + viewDir);
+	float4 halfwayDir = normalize(lightDir - viewDir);
 	float halfwayMag = length(halfwayDir);
 
 	float4 halfway = normalize(halfwayDir) / normalize(halfwayMag);

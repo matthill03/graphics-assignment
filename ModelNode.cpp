@@ -8,6 +8,11 @@ bool ModelNode::Initialise()
 
     _mesh = _resourceManager->GetMesh(_modelName);
 
+	BuildShaders();
+	BuildVertexLayout();
+	BuildConstantBuffer();
+	BuildRasteriserState();
+
 	return true;
 }
 
@@ -25,6 +30,7 @@ void ModelNode::Render()
 	constantBuffer.WorldViewProjection = completeTransformation;
 	constantBuffer.World = _cumulativeWorldTransformation;
 	constantBuffer.DirectionalLightVector = DirectXFramework::GetDXFramework()->GetDirectionalLightVector();
+	constantBuffer.SpecularDirection = DirectXFramework::GetDXFramework()->GetSpecularDirection();
 	constantBuffer.EyePosition = DirectXFramework::GetDXFramework()->GetEyePosition();
 
 	_meshCount = _mesh->GetSubMeshCount();
@@ -33,20 +39,18 @@ void ModelNode::Render()
 		_currentMesh = _mesh->GetSubMesh(UINT(i));
 		_currentMaterial = _currentMesh->GetMaterial();
 
-		if (_currentMesh->HasTexCoords()) {
-			BuildShaders(L"texturedModelShader.hlsl");
-		}
-		else {
-			BuildShaders(L"modelShader.hlsl");
-		}
-		BuildVertexLayout();
-		BuildConstantBuffer();
-		BuildRasteriserState();
-
 		constantBuffer.SpecularPower = _currentMaterial->GetShininess();
 		constantBuffer.SpecularColour = _currentMaterial->GetSpecularColour();
 		constantBuffer.DirectionalLightColour = _currentMaterial->GetDiffuseColour();
-		_texture = _currentMaterial->GetTexture();
+
+		if (_currentMesh->HasTexCoords()) {
+			_texture = _currentMaterial->GetTexture();
+			_deviceContext->PSSetShaderResources(0, 1, _texture.GetAddressOf());
+			_deviceContext->PSSetShader(_texturePixelShader.Get(), 0, 0);
+		}
+		else {
+			_deviceContext->PSSetShader(_pixelShader.Get(), 0, 0);
+		}
 
 		// Update the constant buffer. Note the layout of the constant buffer must match that in the shader
 		_deviceContext->VSSetConstantBuffers(0, 1, _constantBuffer.GetAddressOf());
@@ -54,7 +58,6 @@ void ModelNode::Render()
 		_deviceContext->UpdateSubresource(_constantBuffer.Get(), 0, 0, &constantBuffer, 0, 0);
 
 		// Set Texture to be used in render
-		_deviceContext->PSSetShaderResources(0, 1, _texture.GetAddressOf());
 
 		// Now render the cube
 		// Specify the distance between vertices and the starting point in the vertex buffer
@@ -72,7 +75,6 @@ void ModelNode::Render()
 
 		// Specify the vertex and pixel shaders we are going to use
 		_deviceContext->VSSetShader(_vertexShader.Get(), 0, 0);
-		_deviceContext->PSSetShader(_pixelShader.Get(), 0, 0);
 		//deviceContext->PSSetShaderResources();
 
 		// Specify details about how the object is to be drawn
@@ -83,7 +85,7 @@ void ModelNode::Render()
 	}
 }
 
-void ModelNode::BuildShaders(LPCWSTR shaderFileName)
+void ModelNode::BuildShaders()
 {
 	DWORD shaderCompileFlags = 0;
 #if defined( _DEBUG )
@@ -93,7 +95,7 @@ void ModelNode::BuildShaders(LPCWSTR shaderFileName)
 	ComPtr<ID3DBlob> compilationMessages = nullptr;
 
 	//Compile vertex shader
-	HRESULT hr = D3DCompileFromFile(shaderFileName,
+	HRESULT hr = D3DCompileFromFile(ShaderFileName,
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		VertexShaderName, "vs_5_0",
 		shaderCompileFlags, 0,
@@ -110,7 +112,7 @@ void ModelNode::BuildShaders(LPCWSTR shaderFileName)
 	ThrowIfFailed(_device->CreateVertexShader(_vertexShaderByteCode->GetBufferPointer(), _vertexShaderByteCode->GetBufferSize(), NULL, _vertexShader.GetAddressOf()));
 
 	// Compile pixel shader
-	hr = D3DCompileFromFile(shaderFileName,
+	hr = D3DCompileFromFile(ShaderFileName,
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		PixelShaderName, "ps_5_0",
 		shaderCompileFlags, 0,
@@ -124,6 +126,39 @@ void ModelNode::BuildShaders(LPCWSTR shaderFileName)
 	}
 	ThrowIfFailed(hr);
 	ThrowIfFailed(_device->CreatePixelShader(_pixelShaderByteCode->GetBufferPointer(), _pixelShaderByteCode->GetBufferSize(), NULL, _pixelShader.GetAddressOf()));
+
+	//Compile vertex shader
+	hr = D3DCompileFromFile(TextureShaderFileName,
+		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
+		VertexShaderName, "vs_5_0",
+		shaderCompileFlags, 0,
+		_vertexShaderByteCode.GetAddressOf(),
+		compilationMessages.GetAddressOf());
+
+	if (compilationMessages.Get() != nullptr)
+	{
+		// If there were any compilation messages, display them
+		MessageBoxA(0, (char*)compilationMessages->GetBufferPointer(), 0, 0);
+	}
+	// Even if there are no compiler messages, check to make sure there were no other errors.
+	ThrowIfFailed(hr);
+	ThrowIfFailed(_device->CreateVertexShader(_vertexShaderByteCode->GetBufferPointer(), _vertexShaderByteCode->GetBufferSize(), NULL, _textureVertexShader.GetAddressOf()));
+
+	// Compile pixel shader
+	hr = D3DCompileFromFile(TextureShaderFileName,
+		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
+		PixelShaderName, "ps_5_0",
+		shaderCompileFlags, 0,
+		_pixelShaderByteCode.GetAddressOf(),
+		compilationMessages.GetAddressOf());
+
+	if (compilationMessages.Get() != nullptr)
+	{
+		// If there were any compilation messages, display them
+		MessageBoxA(0, (char*)compilationMessages->GetBufferPointer(), 0, 0);
+	}
+	ThrowIfFailed(hr);
+	ThrowIfFailed(_device->CreatePixelShader(_pixelShaderByteCode->GetBufferPointer(), _pixelShaderByteCode->GetBufferSize(), NULL, _texturePixelShader.GetAddressOf()));
 }
 
 void ModelNode::BuildVertexLayout()
