@@ -3,6 +3,10 @@
 #include "Framework.h"
 #include "DirectXCore.h"
 #include "SceneGraph.h"
+#include "CubeRenderer.h"
+#include "TexturedCubeRenderer.h"
+#include "TeapotRenderer.h"
+#include "ResourceManager.h"
 
 class DirectXFramework : public Framework
 {
@@ -25,8 +29,20 @@ public:
 	inline ComPtr<ID3D11Device>			GetDevice() { return _device; }
 	inline ComPtr<ID3D11DeviceContext>	GetDeviceContext() { return _deviceContext; }
 
+	const Vector4						GetDirectionalLightColour() { return _directionalLightColour; };
+	const Vector4						GetDirectionalLightVector() { return _directionalLightVector; };
+	const float							GetSpecularPower() { return _specularPower; };
+	const Vector4						GetSpecularColour() { return _specularColour; };
+
 	const Matrix&						GetViewTransformation() const;
 	const Matrix&						GetProjectionTransformation() const;
+	const Vector3						GetEyePosition() { return _eyePosition; };
+
+	const CubeRendererPointer			GetCubeRenderer() { return _cubeRender; };
+	const TexturedCubeRendererPointer	GetTexturedCubeRenderer() { return _texturedCubeRender; };
+	const TeapotRendererPointer			GetTeapotRenderer() { return _teapotRender; };
+
+	const shared_ptr<ResourceManager>	GetResourceManger() { return _resourceManager; };
 
 	void								SetBackgroundColour(Vector4 backgroundColour);
 
@@ -44,12 +60,24 @@ private:
 	Vector3								_focalPointPosition;
 	Vector3								_upVector;
 
+	Vector4								_directionalLightVector;
+	Vector4								_directionalLightColour;
+	float								_specularPower;
+	Vector4								_specularColour;
+
 	Matrix								_viewTransformation;
 	Matrix								_projectionTransformation;
 
 	SceneGraphPointer					_sceneGraph;
 
 	float							    _backgroundColour[4];
+
+	CubeRendererPointer					_cubeRender;
+	TexturedCubeRendererPointer			_texturedCubeRender;
+	TeapotRendererPointer				_teapotRender;
+
+	shared_ptr<ResourceManager>			_resourceManager;
+
 
 	bool GetDeviceAndSwapChain();
 };

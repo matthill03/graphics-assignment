@@ -3,6 +3,7 @@
 #include "CubeNode.h"
 #include "TexturedCubeNode.h"
 #include "TeapotNode.h"
+#include "ModelNode.h"
 
 class DirectXApp : public DirectXFramework
 {
