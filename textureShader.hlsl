@@ -62,7 +62,7 @@ float4 PS(VertexOut pin) : SV_Target
 	float4 specCol = specular * specularColour;
 
 	// calculate the diffuse light and add it to the ambient light
-	float diffuseBrightness = saturate(dot(pin.Normal, -vectorBackToLight));
+	float diffuseBrightness = saturate(dot(pin.Normal, vectorBackToLight));
 	float4 Colour = saturate(ambientLightColour) + saturate(diffuseBrightness) * saturate(directionalLightColour);
 
 	float4 newColour = Colour + specCol;

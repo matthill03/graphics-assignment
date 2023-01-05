@@ -25,5 +25,6 @@ private:
 	virtual bool Initialise();
 	virtual void Render();
 	virtual void Shutdown();
+
 };
 

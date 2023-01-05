@@ -6,6 +6,7 @@
 #include "CubeRenderer.h"
 #include "TexturedCubeRenderer.h"
 #include "TeapotRenderer.h"
+#include "ResourceManager.h"
 
 class DirectXFramework : public Framework
 {
@@ -35,10 +36,13 @@ public:
 
 	const Matrix&						GetViewTransformation() const;
 	const Matrix&						GetProjectionTransformation() const;
+	const Vector3						GetEyePosition() { return _eyePosition; };
 
 	const CubeRendererPointer			GetCubeRenderer() { return _cubeRender; };
 	const TexturedCubeRendererPointer	GetTexturedCubeRenderer() { return _texturedCubeRender; };
 	const TeapotRendererPointer			GetTeapotRenderer() { return _teapotRender; };
+
+	const shared_ptr<ResourceManager>	GetResourceManger() { return _resourceManager; };
 
 	void								SetBackgroundColour(Vector4 backgroundColour);
 
@@ -71,6 +75,8 @@ private:
 	CubeRendererPointer					_cubeRender;
 	TexturedCubeRendererPointer			_texturedCubeRender;
 	TeapotRendererPointer				_teapotRender;
+
+	shared_ptr<ResourceManager>			_resourceManager;
 
 
 	bool GetDeviceAndSwapChain();

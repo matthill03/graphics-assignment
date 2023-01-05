@@ -75,6 +75,15 @@
     <ClInclude Include="TeapotRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectXApp.cpp">
@@ -116,6 +125,15 @@
     <ClCompile Include="TeapotRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="DirectXApp.ico">
@@ -125,6 +143,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="woodbox.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BiPlane\bihull.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BiPlane\wings.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -137,9 +161,13 @@
     <None Include="SimpleMath.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="BiPlane\airplane.x" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="shader.hlsl" />
-    <Text Include="textureShader.hlsl" />
+    <CopyFileToFolders Include="assimp-vc143-mt.dll" />
+    <CopyFileToFolders Include="shader.hlsl" />
+    <CopyFileToFolders Include="textureShader.hlsl" />
+    <CopyFileToFolders Include="modelShader.hlsl" />
+    <CopyFileToFolders Include="texturedModelShader.hlsl" />
   </ItemGroup>
 </Project>

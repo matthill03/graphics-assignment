@@ -17,17 +17,17 @@ DirectXFramework::DirectXFramework(unsigned int width, unsigned int height) : Fr
 	// Set default background colour
 	_backgroundColour[0] = 0.0f;
 	_backgroundColour[1] = 0.0f;
-	_backgroundColour[2] = 0.0f;
+	_backgroundColour[2] = 0.5f;
 	_backgroundColour[3] = 0.0f;
 
 	// Initialise vectors used to create camera.  We will move these
 	// to a separate Camera class later
-	_directionalLightVector = Vector4(4.0f,0.0f, -5.0f, 0.0f);
-	_directionalLightColour = Vector4(0.4f, 0.0f, 0.0f, 1.0f);
+	_directionalLightVector = Vector4(4.0f, 0.0f, 5.0f, 0.0f);
+	_directionalLightColour = Vector4(0.3f, 0.0f, 0.0f, 1.0f);
 	_specularPower = 10.0f;
 	_specularColour = Vector4(1.0f, 1.0f, 1.0f, 0.0f);
 
-	_eyePosition = Vector3(0.0f, 20.0f, -90.0f);
+	_eyePosition = Vector3(0.0f, 20.0f, -120.0f);
 	_focalPointPosition = Vector3(0.0f, 20.0f, 0.0f);
 	_upVector = Vector3(0.0f, 1.0f, 0.0f);
 
@@ -87,6 +87,9 @@ bool DirectXFramework::Initialise()
 	_cubeRender = make_shared<CubeRenderer>(_device, _deviceContext, _viewTransformation, _projectionTransformation);
 	_texturedCubeRender = make_shared<TexturedCubeRenderer>(_device, _deviceContext, _viewTransformation, _projectionTransformation);
 	_teapotRender = make_shared<TeapotRenderer>(_device, _deviceContext, _viewTransformation, _projectionTransformation);
+
+	// Create resource manager
+	_resourceManager = make_shared<ResourceManager>();
 
 	CreateSceneGraph();
 

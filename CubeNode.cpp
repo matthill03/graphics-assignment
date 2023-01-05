@@ -22,7 +22,7 @@ void CubeNode::Render() {
 	constantBuffer.AmbientLightColour = _ambientLightColour;
 	constantBuffer.DirectionalLightVector = DirectXFramework::GetDXFramework()->GetDirectionalLightVector();
 	constantBuffer.DirectionalLightColour = DirectXFramework::GetDXFramework()->GetDirectionalLightColour();
-	constantBuffer.EyePosition = _eyePosition;
+	constantBuffer.EyePosition = DirectXFramework::GetDXFramework()->GetEyePosition();
 	constantBuffer.SpecularPower = DirectXFramework::GetDXFramework()->GetSpecularPower();
 	constantBuffer.SpecularColour = DirectXFramework::GetDXFramework()->GetSpecularColour();
 
