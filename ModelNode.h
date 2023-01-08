@@ -4,7 +4,8 @@
 #include "CBuffer.h"
 #include "WICTextureLoader.h"
 
-#define ShaderFileName		L"shader.hlsl"
+#define ShaderFileName		L"modelShader.hlsl"
+#define TextureShaderFileName	L"texturedModelShader.hlsl"
 #define VertexShaderName	"VS"
 #define PixelShaderName		"PS"
 
@@ -50,6 +51,8 @@ private:
 	ComPtr<ID3DBlob>				_pixelShaderByteCode = nullptr;
 	ComPtr<ID3D11VertexShader>		_vertexShader;
 	ComPtr<ID3D11PixelShader>		_pixelShader;
+	ComPtr<ID3D11VertexShader>		_textureVertexShader;
+	ComPtr<ID3D11PixelShader>		_texturePixelShader;
 	ComPtr<ID3D11InputLayout>		_layout;
 	ComPtr<ID3D11Buffer>			_constantBuffer;
 
@@ -58,7 +61,7 @@ private:
 	// Methods for passing data from CPU to GPU, also building data to be passes
 
 	//void BuildGeometryBuffers();
-	void BuildShaders(LPCWSTR pixelShaderName);
+	void BuildShaders();
 	void BuildVertexLayout();
 	void BuildConstantBuffer();
 	void BuildRasteriserState();

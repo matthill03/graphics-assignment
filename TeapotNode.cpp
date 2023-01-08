@@ -21,6 +21,7 @@ void TeapotNode::Render()
 	constantBuffer.EyePosition = DirectXFramework::GetDXFramework()->GetEyePosition();
 	constantBuffer.SpecularPower = DirectXFramework::GetDXFramework()->GetSpecularPower();
 	constantBuffer.SpecularColour = DirectXFramework::GetDXFramework()->GetSpecularColour();
+	constantBuffer.SpecularDirection = DirectXFramework::GetDXFramework()->GetSpecularDirection();
 
 	DirectXFramework::GetDXFramework()->GetTeapotRenderer()->Render(constantBuffer);
 }
