@@ -29,7 +29,7 @@ void TeapotNode::Render()
 
 void TeapotNode::Shutdown()
 {
-	free(this);
+	delete[] this;
 }
 
 
