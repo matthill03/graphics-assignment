@@ -4,10 +4,10 @@
 #include "CBuffer.h"
 #include "WICTextureLoader.h"
 
-#define ShaderFileName		L"modelShader.hlsl"
+#define ShaderFileName			L"modelShader.hlsl"
 #define TextureShaderFileName	L"texturedModelShader.hlsl"
-#define VertexShaderName	"VS"
-#define PixelShaderName		"PS"
+#define VertexShaderName		"VS"
+#define PixelShaderName			"PS"
 
 // Create derived class from scene node for models 
 class ModelNode : public SceneNode
@@ -16,7 +16,7 @@ class ModelNode : public SceneNode
 public:
 	/*Defining Constructors*/
 	// Default constructor
-	ModelNode() : SceneNode(L"Root") {};
+	ModelNode() : SceneNode(L"Root") { _meshCount = 0; };
 	// Constructor to specify name and colour of cube
 	ModelNode(wstring name, Vector4 colour, wstring model_name) : SceneNode(name) { _ambientLightColour = colour; _modelName = model_name; };
 	// Destructor
@@ -28,6 +28,7 @@ private:
 	virtual void Render();
 	virtual void Shutdown();
 
+	// Member variables
 	ComPtr<ID3D11Device>			_device;
 	ComPtr<ID3D11DeviceContext>		_deviceContext;
 	Matrix							_viewTransformation;
@@ -59,14 +60,12 @@ private:
 	ComPtr<ID3D11RasterizerState>   _rasteriserState;
 
 	// Methods for passing data from CPU to GPU, also building data to be passes
-
-	//void BuildGeometryBuffers();
+	// no need for texture or normal functions as they are already done.
 	void BuildShaders();
 	void BuildVertexLayout();
 	void BuildConstantBuffer();
 	void BuildRasteriserState();
-	//void CalculateVertexNormals();
-	//Vector3 CalculatePolygonNormal(Vector3 p1, Vector3 p2, Vector3 p3);
+
 
 	// Defines the Vertex struct for CubeNode, with a Position and Normal
 	typedef struct {

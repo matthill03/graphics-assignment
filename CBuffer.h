@@ -1,7 +1,8 @@
 #pragma once
 #include "DirectXCore.h"
 
-typedef struct  CBuffer
+// Central CBuffer struct so each node does not have a seperate one.
+struct  CBuffer
 {
 	Matrix		WorldViewProjection;
 	Matrix		World;

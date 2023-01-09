@@ -36,9 +36,6 @@ VertexOut VS(VertexIn vin)
 	vout.Normal = adjustedNormal;
 	vout.WorldPosition = mul(worldTransformation, float4(vin.InputPosition, 1.0f));
 
-	// calculate the diffuse light and add it to the ambient light
-	//float diffuseBrightness = saturate(dot(adjustedNormal, vectorBackToLight));
-	//vout.Colour = saturate(ambientLightColour + diffuseBrightness * directionalLightColour);
     return vout;
 }
 
@@ -50,6 +47,7 @@ float4 PS(VertexOut pin) : SV_Target
 	float diffuseBrightness = saturate(dot(pin.Normal, vectorBackToLight));
 	float4 Colour = saturate(ambientLightColour) + (saturate(diffuseBrightness) * saturate(directionalLightColour));
 
+	// Calculate spot lighting using blinn phone model
 	float4 lightDir = normalize(pin.WorldPosition - specularDirection);
 	float4 viewDir = normalize(pin.WorldPosition - float4(eyePosition, 1.0f));
 
@@ -62,6 +60,7 @@ float4 PS(VertexOut pin) : SV_Target
 
 	float4 specCol = specular * specularColour;
 
+	// Add spot lighting to the diffuse lighting
 	float4 newColour = Colour + specCol;
 	return newColour;
 

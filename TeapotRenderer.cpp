@@ -218,7 +218,9 @@ Vector3 TeapotRenderer::CalculatePolygonNormal(Vector3 p1, Vector3 p2, Vector3 p
 
 void TeapotRenderer::PopulateTeapotVertices()
 {
+	// For every three items in the vertexFloats 
 	for (int i = 0; i < ARRAYSIZE(vertexFloats); i += 3) {
+		// take the first, second and third and make a vertex with x,y,z accordingly.
 		vertices[i / 3] = { Vector3(vertexFloats[i], vertexFloats[i + 1], vertexFloats[i + 2]), Vector3(0, 0, 0) };
 	}
 }

@@ -10,12 +10,15 @@
 class CubeRenderer
 {
 public:
+	/* Defining Constructor */
 	CubeRenderer(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, Matrix viewTransformation, Matrix projectionTransformation) { _device = device; _deviceContext = deviceContext; _viewTransformation = viewTransformation; _projectionTransformation = projectionTransformation; };
 	
+	// Public methods
 	void Render(CBuffer constantBuffer);
 	bool Initialise();
 
 private:
+	// Member variables
 	ComPtr<ID3D11Device>			_device;
 	ComPtr<ID3D11DeviceContext>		_deviceContext;
 	Matrix							_viewTransformation;
@@ -110,5 +113,6 @@ private:
 	UINT polygonCount[ARRAYSIZE(vertices)]{ 0 };
 };
 
+// Creating short hand for creating a cube renderer pointer
 typedef shared_ptr<CubeRenderer>	CubeRendererPointer;
 

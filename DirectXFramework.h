@@ -29,17 +29,21 @@ public:
 	inline ComPtr<ID3D11Device>			GetDevice() { return _device; }
 	inline ComPtr<ID3D11DeviceContext>	GetDeviceContext() { return _deviceContext; }
 
+	// Methods to get global variables for the entire scene.
 	const Vector4						GetDirectionalLightColour() { return _directionalLightColour; };
 	const Vector4						GetDirectionalLightVector() { return _directionalLightVector; };
 	const float							GetSpecularPower() { return _specularPower; };
 	const Vector4						GetSpecularColour() { return _specularColour; };
 	const Vector4						GetSpecularDirection() { return _specularLightDirection; };
+
+	// ability to move the spot light position.
 	void								SetSpecularDirection(Vector4 specularDirection) { _specularLightDirection = specularDirection; };
 
 	const Matrix&						GetViewTransformation() const;
 	const Matrix&						GetProjectionTransformation() const;
 	const Vector3						GetEyePosition() { return _eyePosition; };
 
+	// Methods to get all renderers to call render for the node instances.
 	const CubeRendererPointer			GetCubeRenderer() { return _cubeRender; };
 	const TexturedCubeRendererPointer	GetTexturedCubeRenderer() { return _texturedCubeRender; };
 	const TeapotRendererPointer			GetTeapotRenderer() { return _teapotRender; };

@@ -10,11 +10,14 @@
 class TexturedCubeRenderer
 {
 public:
+	/* Defining Constructor */
 	TexturedCubeRenderer(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, Matrix viewTransformation, Matrix projectionTransformation) { _device = device; _deviceContext = deviceContext; _viewTransformation = viewTransformation; _projectionTransformation = projectionTransformation; };
 
+	// Public methods
 	void Render(CBuffer constantBuffer, ComPtr<ID3D11ShaderResourceView> _texture);
 	bool Initialise();
 private:
+	// Member variables
 	ComPtr<ID3D11Device>			_device;
 	ComPtr<ID3D11DeviceContext>		_deviceContext;
 	Matrix							_viewTransformation;
@@ -32,21 +35,23 @@ private:
 
 	ComPtr<ID3D11RasterizerState>   _rasteriserState;
 
+	// Private methods for initialising
 	void BuildGeometryBuffers();
 	void BuildShaders();
 	void BuildVertexLayout();
 	void BuildConstantBuffer();
 	void BuildRasteriserState();
-
 	void CalculateVertexNormals();
 	Vector3 CalculatePolygonNormal(Vector3 p1, Vector3 p2, Vector3 p3);
 
+	// Vertex struct
 	typedef struct {
 		Vector3 Position;
 		Vector3 Normal;
 		Vector2 Texture;
 	}Vertex;
 
+	// Vertex description for graphics card.
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[3] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -102,8 +107,10 @@ private:
 				22, 21, 23,
 	};
 
+	// array for the polygon count of verticies
 	float polygonCount[ARRAYSIZE(vertices)]{ 0 };
 };
 
+// Creating shorthand for creating a textured cube renderer pointer
 typedef shared_ptr<TexturedCubeRenderer>	TexturedCubeRendererPointer;
 

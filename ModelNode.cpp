@@ -2,12 +2,15 @@
 
 bool ModelNode::Initialise()
 {
+	// populate member variables with correct values
     _resourceManager = DirectXFramework::GetDXFramework()->GetResourceManger();
 	_device = DirectXFramework::GetDXFramework()->GetDevice();
 	_deviceContext = DirectXFramework::GetDXFramework()->GetDeviceContext();
 
+	// load the model using the private resource manager.
     _mesh = _resourceManager->GetMesh(_modelName);
 
+	// call all initialisation steps
 	BuildShaders();
 	BuildVertexLayout();
 	BuildConstantBuffer();
@@ -18,6 +21,7 @@ bool ModelNode::Initialise()
 
 void ModelNode::Shutdown()
 {
+	// remove this model from memory.
     _resourceManager->ReleaseMesh(_modelName);
 }
 
@@ -26,6 +30,7 @@ void ModelNode::Render()
 	// Calculate the world x view x projection transformation
 	Matrix completeTransformation = _cumulativeWorldTransformation * DirectXFramework::GetDXFramework()->GetViewTransformation() * DirectXFramework::GetDXFramework()->GetProjectionTransformation();
 
+	// populate global constant buffer values
 	CBuffer constantBuffer;
 	constantBuffer.WorldViewProjection = completeTransformation;
 	constantBuffer.World = _cumulativeWorldTransformation;
@@ -33,22 +38,29 @@ void ModelNode::Render()
 	constantBuffer.SpecularDirection = DirectXFramework::GetDXFramework()->GetSpecularDirection();
 	constantBuffer.EyePosition = DirectXFramework::GetDXFramework()->GetEyePosition();
 
+	// find how many sub meshes are in the mesh
 	_meshCount = _mesh->GetSubMeshCount();
 
+	// for each of the sub meshes
 	for (UINT i = 0; i < _meshCount; i++) {
 		_currentMesh = _mesh->GetSubMesh(UINT(i));
+		// get the submesh material
 		_currentMaterial = _currentMesh->GetMaterial();
 
+		// populate the individual constant buffer values.
 		constantBuffer.SpecularPower = _currentMaterial->GetShininess();
 		constantBuffer.SpecularColour = _currentMaterial->GetSpecularColour();
 		constantBuffer.DirectionalLightColour = _currentMaterial->GetDiffuseColour();
 
+		// if the submesh has texture coordinates
 		if (_currentMesh->HasTexCoords()) {
+			// use the texture shader, and send the texture to the graphics card.
 			_texture = _currentMaterial->GetTexture();
 			_deviceContext->PSSetShaderResources(0, 1, _texture.GetAddressOf());
 			_deviceContext->PSSetShader(_texturePixelShader.Get(), 0, 0);
 		}
 		else {
+			// if not use the regular pixel shader.
 			_deviceContext->PSSetShader(_pixelShader.Get(), 0, 0);
 		}
 
