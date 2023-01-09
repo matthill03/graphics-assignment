@@ -9,9 +9,7 @@ void DirectXApp::CreateSceneGraph()
 
 	SceneNodePointer head = SceneNodePointer(new TexturedCubeNode(L"Head", Vector4(1.0f, 1.0f, 1.0f, 1.0f), L"woodbox.bmp"));
 
-	//// Scale * Rotaion * Translation
 	head->SetWorldTransform(Matrix::CreateScale(Vector3(3, 3, 3)) * Matrix::CreateTranslation(Vector3(0, 34, 0)));
-	//// thisWorldTransform[0][0] = vector.x; // thisWorldTransform[0][1] = vector.y; // thisWorldTransform[0][2] = vector.z;
 
 	SceneNodePointer nose = SceneNodePointer(new CubeNode(L"Nose", Vector4(0.4f, 0.1f, 0.1f, 1.0f)));
 	nose->SetWorldTransform(Matrix::CreateTranslation(Vector3(0, 33, -4)));
@@ -23,7 +21,7 @@ void DirectXApp::CreateSceneGraph()
 	leftArm->SetWorldTransform(Matrix::CreateScale(Vector3(1, 8.5, 1)) * Matrix::CreateTranslation(Vector3(-6, 22, 0)));
 
 	SceneNodePointer rightArm = SceneNodePointer(new CubeNode(L"Right Arm", Vector4(0.0f, 0.4f, 0.0f, 1.0f)));
-	rightArm->SetWorldTransform(Matrix::CreateScale(Vector3(1, 8.5, 1)) * Matrix::CreateRotationX(1.6) * Matrix::CreateTranslation(Vector3(6, 22, 0)));
+	rightArm->SetWorldTransform(Matrix::CreateScale(Vector3(1, 8.5, 1)) * Matrix::CreateRotationX(1.6f) * Matrix::CreateTranslation(Vector3(6, 22, 0)));
 
 	SceneNodePointer leftLeg = SceneNodePointer(new CubeNode(L"Left Leg", Vector4(0.1f, 0.2f, 0.3f, 1.0f)));
 	leftLeg->SetWorldTransform(Matrix::CreateScale(Vector3(1, 7.5, 1)) * Matrix::CreateTranslation(Vector3(-4, 7.5, 0)));
@@ -50,7 +48,6 @@ void DirectXApp::CreateSceneGraph()
 	sceneGraph->Add(leftLeg);
 	sceneGraph->Add(rightLeg);
 
-	/*sceneGraph->Add(randomTeapot);*/
 	sceneGraph->Add(randomModel);
 
 }
@@ -65,9 +62,6 @@ void DirectXApp::UpdateSceneGraph()
 	SceneNodePointer leftLeg = sceneGraph->Find(L"Left Leg");
 	SceneNodePointer rightLeg = sceneGraph->Find(L"Right Leg");
 	SceneNodePointer model = sceneGraph->Find(L"Model");
-
-	_yPosition += 0.1;
-	DirectXFramework::GetDXFramework()->SetSpecularDirection(Vector4(0.0f, _yPosition, 0.0f, 0.0f));
 
 	if (_leftArmRotation > 0.6f) {
 		_swingDirection = false;

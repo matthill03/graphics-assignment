@@ -23,11 +23,13 @@ void TeapotNode::Render()
 	constantBuffer.SpecularColour = DirectXFramework::GetDXFramework()->GetSpecularColour();
 	constantBuffer.SpecularDirection = DirectXFramework::GetDXFramework()->GetSpecularDirection();
 
+	// Call render with the TeapotRenderer passing in this constant buffer.
 	DirectXFramework::GetDXFramework()->GetTeapotRenderer()->Render(constantBuffer);
 }
 
 void TeapotNode::Shutdown()
 {
+	free(this);
 }
 
 

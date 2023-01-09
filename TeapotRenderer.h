@@ -10,12 +10,15 @@
 class TeapotRenderer
 {
 public:
+    /* Defining Constructor */
 	TeapotRenderer(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, Matrix viewTransformation, Matrix projectionTransformation) { _device = device; _deviceContext = deviceContext; _viewTransformation = viewTransformation; _projectionTransformation = projectionTransformation; };
 
+    // Public methods
 	void Render(CBuffer constantBuffer);
 	bool Initialise();
 
 private:
+    // Member variables
 	ComPtr<ID3D11Device>			_device;
 	ComPtr<ID3D11DeviceContext>		_deviceContext;
 	Matrix							_viewTransformation;
@@ -650,6 +653,8 @@ private:
                      0.573395f, 0.362623f,-0.165462f,  0.606002f, 0.330678f,-0.174537f
     };
 
+    // Arrys to be populated at runtime, to hold vertices and polygon count
+    // for vertices.
     Vertex vertices[ARRAYSIZE(vertexFloats) / 3];
     UINT polygonCount[ARRAYSIZE(vertices)]{ 0 };
 
@@ -1222,5 +1227,6 @@ private:
     };
 };
 
+// Creating shorthand to create a teapot renderer pointer
 typedef shared_ptr<TeapotRenderer> TeapotRendererPointer;
 

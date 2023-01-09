@@ -171,13 +171,18 @@ void TexturedCubeRenderer::BuildRasteriserState()
 
 void TexturedCubeRenderer::CalculateVertexNormals()
 {
+	// for all verticies set count to 0
 	for (int i = 0; i < ARRAYSIZE(vertices); i++) {
 		polygonCount[i] = 0;
 	}
 
+	// for all verticies in list of indices
 	for (int i = 0; i < ARRAYSIZE(indices); i += 3) {
+		// calculate polygon normal for each polygon
 		Vector3 polygonNormal = CalculatePolygonNormal(vertices[indices[i]].Position, vertices[indices[i + 1]].Position, vertices[indices[i + 2]].Position);
 
+		// set vertex normal of all vertex in a polygon to calculated normal.
+		// and increment the count of polygons that vertex is in.
 		vertices[indices[i]].Normal = vertices[indices[i]].Normal + polygonNormal;
 		polygonCount[indices[i]]++;
 
@@ -188,6 +193,8 @@ void TexturedCubeRenderer::CalculateVertexNormals()
 		polygonCount[indices[i + 2]]++;
 	}
 
+	// for each of the vertices, divide the cumulative normal by the polygon count
+	// and normalize.
 	for (int i = 0; i < ARRAYSIZE(vertices); i++) {
 		vertices[i].Normal /= polygonCount[i];
 		vertices[i].Normal.Normalize();
@@ -196,9 +203,11 @@ void TexturedCubeRenderer::CalculateVertexNormals()
 
 Vector3 TexturedCubeRenderer::CalculatePolygonNormal(Vector3 p1, Vector3 p2, Vector3 p3)
 {
+	// take the vector between point 1 and 2 and the vector between 1 and 3
 	Vector3 v12 = p1 - p2;
 	Vector3 v13 = p1 - p3;
 
+	// get the cross product, giving the normal of that polygon.
 	Vector3 normalVector = v12.Cross(v13);
 
 	return normalVector;
