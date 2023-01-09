@@ -30,7 +30,7 @@ void TexturedCubeNode::Render() {
 void TexturedCubeNode::Shutdown()
 {
 	// Delete this object from memory
-	free(this);
+	delete[] this;
 }
 
 void TexturedCubeNode::BuildTexture()

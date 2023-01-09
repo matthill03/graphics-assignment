@@ -33,6 +33,7 @@ void CubeNode::Render() {
 
 // Implementing Shutdown()
 void CubeNode::Shutdown() {
-
+	// delete this instance from memory
+	delete[] this;
 }
 
