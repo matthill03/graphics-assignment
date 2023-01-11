@@ -34,10 +34,8 @@ public:
 	const Vector4						GetDirectionalLightVector() { return _directionalLightVector; };
 	const float							GetSpecularPower() { return _specularPower; };
 	const Vector4						GetSpecularColour() { return _specularColour; };
-	const Vector4						GetSpecularDirection() { return _specularLightDirection; };
 
 	// ability to move the spot light position.
-	void								SetSpecularDirection(Vector4 specularDirection) { _specularLightDirection = specularDirection; };
 
 	const Matrix&						GetViewTransformation() const;
 	const Matrix&						GetProjectionTransformation() const;
@@ -70,7 +68,6 @@ private:
 	Vector4								_directionalLightColour;
 	float								_specularPower;
 	Vector4								_specularColour;
-	Vector4								_specularLightDirection;
 
 	Matrix								_viewTransformation;
 	Matrix								_projectionTransformation;

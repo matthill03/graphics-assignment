@@ -21,7 +21,6 @@ void TexturedCubeNode::Render() {
 	constantBuffer.EyePosition = DirectXFramework::GetDXFramework()->GetEyePosition();
 	constantBuffer.SpecularPower = DirectXFramework::GetDXFramework()->GetSpecularPower();
 	constantBuffer.SpecularColour = DirectXFramework::GetDXFramework()->GetSpecularColour();
-	constantBuffer.SpecularDirection = DirectXFramework::GetDXFramework()->GetSpecularDirection();
 
 	// Call TexturedCubeRender using the texture that has been built
 	DirectXFramework::GetDXFramework()->GetTexturedCubeRenderer()->Render(constantBuffer, _texture);
@@ -29,8 +28,6 @@ void TexturedCubeNode::Render() {
 
 void TexturedCubeNode::Shutdown()
 {
-	// Delete this object from memory
-	delete[] this;
 }
 
 void TexturedCubeNode::BuildTexture()

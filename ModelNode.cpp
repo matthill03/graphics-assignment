@@ -35,7 +35,6 @@ void ModelNode::Render()
 	constantBuffer.WorldViewProjection = completeTransformation;
 	constantBuffer.World = _cumulativeWorldTransformation;
 	constantBuffer.DirectionalLightVector = DirectXFramework::GetDXFramework()->GetDirectionalLightVector();
-	constantBuffer.SpecularDirection = DirectXFramework::GetDXFramework()->GetSpecularDirection();
 	constantBuffer.EyePosition = DirectXFramework::GetDXFramework()->GetEyePosition();
 
 	// find how many sub meshes are in the mesh
