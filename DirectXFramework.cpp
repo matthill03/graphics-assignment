@@ -24,11 +24,10 @@ DirectXFramework::DirectXFramework(unsigned int width, unsigned int height) : Fr
 	// to a separate Camera class later
 	// Set all global variables for the entire scene here,
 	// done so they only have to be changed ones when wanting to be changed.
-	_directionalLightVector = Vector4(15.0f, 60.0f, 30.0f, 0.0f);
+	_directionalLightVector = Vector4(4.0f, -3.0f, 5.0f, 0.0f);
 	_directionalLightColour = Vector4(0.5f, 0.0f, 0.0f, 1.0f);
-	_specularPower = 32.0f;
+	_specularPower = 50.0f;
 	_specularColour = Vector4(1.0f, 1.0f, 1.0f, 0.0f);
-	_specularLightDirection = Vector4(0.0f, 20.0f, 0.0f, 0.0f);
 
 	_eyePosition = Vector3(0.0f, 20.0f, -100.0f);
 	_focalPointPosition = Vector3(0.0f, 20.0f, 0.0f);

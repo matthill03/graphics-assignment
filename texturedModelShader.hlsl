@@ -8,7 +8,6 @@ cbuffer ConstantBuffer
 	float3	eyePosition;
 	float	specularPower;
 	float4	specularColour;
-	float4	specularDirection;
 };
 
 Texture2D Texture;
@@ -49,9 +48,13 @@ VertexOut VS(VertexIn vin)
 float4 PS(VertexOut pin) : SV_Target
 {
 	float4 vectorBackToLight = -directionalLightVector;
-	
+
+	// calculate the diffuse light and add it to the ambient light
+	float diffuseBrightness = saturate(dot(pin.Normal, vectorBackToLight));
+	float4 Colour = saturate(ambientLightColour) + saturate(diffuseBrightness) * saturate(directionalLightColour);
+
 	// Calculate spot lighting using blinn phone model
-	float4 lightDir = normalize(pin.WorldPosition - specularDirection);
+	float4 lightDir = normalize(pin.WorldPosition - directionalLightVector);
 	float4 viewDir = normalize(pin.WorldPosition - float4(eyePosition, 1.0f));
 
 	float4 halfwayDir = normalize(lightDir - viewDir);
@@ -59,16 +62,11 @@ float4 PS(VertexOut pin) : SV_Target
 
 	float4 halfway = normalize(halfwayDir) / normalize(halfwayMag);
 
-	float specular = pow(saturate(dot(pin.Normal, halfway)), specularPower);
+	float specular = pow(saturate(dot(halfway, pin.Normal)), specularPower);
 
 	float4 specCol = specular * specularColour;
 
-	// calculate the diffuse light and add it to the ambient light
-	float diffuseBrightness = saturate(dot(pin.Normal, vectorBackToLight));
-	float4 Colour = saturate(ambientLightColour) + saturate(diffuseBrightness) * saturate(directionalLightColour);
-
 	// Add spot lighting to the diffuse lighting
-	float4 newColour = Colour + specCol;
-
+	float4 newColour = Colour + specular;
 	return newColour * Texture.Sample(ss, pin.TexCoord);
 }
